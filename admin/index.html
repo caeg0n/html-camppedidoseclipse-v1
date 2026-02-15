@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Eclipse Cardápio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <header class="admin-hero">
+      <div>
+        <p class="kicker">Painel de Administração</p>
+        <h1>Editar Cardápio</h1>
+        <p class="subtle">
+          Edite os itens abaixo e exporte o arquivo atualizado do
+          <code>MENU_DATA</code>.
+        </p>
+      </div>
+      <div class="admin-actions">
+        <button id="save-draft" class="btn">Salvar rascunho</button>
+        <button id="load-draft" class="btn btn-ghost">Carregar rascunho</button>
+        <button id="export-file" class="btn btn-primary">
+          Exportar menu-data.js
+        </button>
+      </div>
+    </header>
+
+    <main id="editor"></main>
+
+    <section class="helper">
+      <h2>Como aplicar no site</h2>
+      <ol>
+        <li>Edite os dados e clique em <strong>Exportar menu-data.js</strong>.</li>
+        <li>Substitua o arquivo <code>menu-data.js</code> no projeto pelo arquivo baixado.</li>
+        <li>Faça o deploy normalmente (GitHub Pages).</li>
+      </ol>
+      <p class="subtle">
+        O painel não grava direto no servidor (site estático), por isso o download.
+      </p>
+    </section>
+
+    <script src="../menu-data.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
