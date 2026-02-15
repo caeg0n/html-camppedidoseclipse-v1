@@ -258,6 +258,17 @@ if errorlevel 1 (
 
 echo.
 echo [8/10] Enviando para GitHub (branch main)...
+echo Sincronizando com origin/main (pull --rebase)...
+git fetch origin >nul 2>nul
+git show-ref --verify --quiet refs/remotes/origin/main
+if not errorlevel 1 (
+  git pull --rebase origin main
+  if errorlevel 1 (
+    echo [ERRO] Falha ao sincronizar com origin/main. Pode haver conflito.
+    echo Resolva conflitos e rode o deploy novamente.
+    exit /b 1
+  )
+)
 git push -u origin main
 if errorlevel 1 (
   echo [ERRO] Falha no push. Verifique permissao do token/repositorio.
