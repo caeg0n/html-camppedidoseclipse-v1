@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="28" fill="#060606"/>
+
+  <!-- Sun -->
+  <g fill="#fdbf00">
+    <circle cx="52" cy="56" r="22"/>
+
+    <!-- Rays (left side, like the brand mark) -->
+    <path d="M26 56 L10 50 L10 62 Z"/>
+    <path d="M30 40 L16 30 L22 44 Z"/>
+    <path d="M40 30 L32 14 L44 24 Z"/>
+    <path d="M56 26 L56 8 L66 22 Z"/>
+    <path d="M34 72 L18 82 L28 66 Z"/>
+    <path d="M44 84 L34 104 L48 92 Z"/>
+  </g>
+
+  <!-- Moon crescent (even-odd subtract) -->
+  <path fill="#fdbf00" fill-rule="evenodd"
+        d="M96 56
+           m -26 0
+           a 26 26 0 1 0 52 0
+           a 26 26 0 1 0 -52 0
+           M88 56
+           m -26 0
+           a 26 26 0 1 1 52 0
+           a 26 26 0 1 1 -52 0"/>
+</svg>
+
