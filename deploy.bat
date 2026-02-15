@@ -194,16 +194,16 @@ if errorlevel 1 (
           "$ErrorActionPreference='Stop';" ^
           "$tokenPath='.secrets\\github_token.txt';" ^
           "$pt='';" ^
-          "if (Test-Path $tokenPath) { $pt=(Get-Content $tokenPath -Raw).Trim() } else { $t=Read-Host 'GitHub token para salvar menu-data.js' -AsSecureString; $pt=[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($t)) }" ^
+          "if (Test-Path $tokenPath) { $pt=(Get-Content $tokenPath -Raw).Trim() } else { $t=Read-Host 'GitHub token para salvar menu-data.js' -AsSecureString; $pt=[Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($t)) }" ^
           "$k=Read-Host 'Chave do Admin' -AsSecureString;" ^
-          "$pk=[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($k));" ^
+          "$pk=[Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($k));" ^
           "$blob=($pt + \"`n\" + $pk) | node admin\\encrypt-token.mjs --stdin;" ^
-          "Set-Content -Path admin\\token-blob.json -Value $blob -Encoding utf8;" ^
+          "if (-not $blob) { throw 'Falha ao gerar blob criptografado' }" ^
           "$js=Get-Content admin\\admin.js -Raw;" ^
-          "$json=(Get-Content admin\\token-blob.json -Raw).Trim();" ^
+          "$json=$blob.Trim();" ^
           "$js=$js -replace 'const embeddedEncryptedToken = null;', ('const embeddedEncryptedToken = ' + $json + ';');" ^
           "Set-Content -Path admin\\admin.js -Value $js -Encoding utf8;" ^
-          "Remove-Item -Force admin\\token-blob.json;"
+          ""
         if errorlevel 1 (
           echo [AVISO] Falha ao gerar/injetar token criptografado. Continuando sem isso.
         ) else (
