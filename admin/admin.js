@@ -3,12 +3,14 @@ const loadBtn = document.getElementById("load-file");
 const downloadBtn = document.getElementById("download-file");
 const copyBtn = document.getElementById("copy-file");
 const saveRemoteBtn = document.getElementById("save-remote");
+const toggleTokenBtn = document.getElementById("toggle-token");
 
 const ownerInput = document.getElementById("owner");
 const repoInput = document.getElementById("repo");
 const branchInput = document.getElementById("branch");
 const pathInput = document.getElementById("path");
 const tokenInput = document.getElementById("token");
+const tokenField = document.querySelector(".field-token");
 
 const storageKey = "menuAdminSettings";
 
@@ -50,15 +52,15 @@ function loadSettings() {
   const saved = localStorage.getItem(storageKey);
   if (saved) {
     const data = JSON.parse(saved);
-    ownerInput.value = data.owner || "";
-    repoInput.value = data.repo || "";
+    ownerInput.value = data.owner || "caeg0n";
+    repoInput.value = data.repo || "react-eclipsecardapio-v1";
     branchInput.value = data.branch || "main";
     pathInput.value = data.path || "menu-data.js";
     tokenInput.value = data.token || "";
     return;
   }
-  ownerInput.value = "";
-  repoInput.value = "";
+  ownerInput.value = "caeg0n";
+  repoInput.value = "react-eclipsecardapio-v1";
   branchInput.value = "main";
   pathInput.value = "menu-data.js";
 }
@@ -147,6 +149,11 @@ loadBtn.addEventListener("click", loadFromSite);
 downloadBtn.addEventListener("click", downloadFile);
 copyBtn.addEventListener("click", copyAll);
 saveRemoteBtn.addEventListener("click", saveToGitHub);
+toggleTokenBtn.addEventListener("click", () => {
+  const isHidden = tokenField.style.display === "" || tokenField.style.display === "none";
+  tokenField.style.display = isHidden ? "block" : "none";
+  toggleTokenBtn.textContent = isHidden ? "Ocultar token" : "Mostrar token";
+});
 
 loadFromSite();
 loadSettings();

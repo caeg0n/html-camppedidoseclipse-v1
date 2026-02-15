@@ -121,6 +121,13 @@ main {
 
 .field-token {
   grid-column: span 4;
+  display: none;
+}
+
+.field-toggle {
+  grid-column: span 4;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .hint {
