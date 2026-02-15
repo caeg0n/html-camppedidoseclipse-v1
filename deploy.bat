@@ -193,11 +193,14 @@ if errorlevel 1 (
         powershell -NoProfile -Command ^
           "$ErrorActionPreference='Stop';" ^
           "$tokenPath='.secrets\\github_token.txt';" ^
-          "$pt='';" ^
-          "if (Test-Path $tokenPath) { $pt=(Get-Content $tokenPath -Raw).Trim() } else { $t=Read-Host 'GitHub token para salvar menu-data.js' -AsSecureString; $pt=[Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($t)) }" ^
+          "$tokenPath=(Resolve-Path $tokenPath -ErrorAction SilentlyContinue);" ^
+          "if (-not $tokenPath) { throw 'Arquivo nao encontrado: .secrets\\github_token.txt' }" ^
+          "$pt=(Get-Content $tokenPath -Raw).Trim();" ^
+          "if (-not $pt) { throw 'Token vazio em .secrets\\github_token.txt' }" ^
           "$k=Read-Host 'Chave do Admin' -AsSecureString;" ^
           "$pk=[Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($k));" ^
-          "$blob=($pt + \"`n\" + $pk) | node admin\\encrypt-token.mjs --stdin;" ^
+          "$inputText=$pt + \"`n\" + $pk;" ^
+          "$blob=$inputText | & node admin\\encrypt-token.mjs --stdin;" ^
           "if (-not $blob) { throw 'Falha ao gerar blob criptografado' }" ^
           "$js=Get-Content admin\\admin.js -Raw;" ^
           "$json=$blob.Trim();" ^
