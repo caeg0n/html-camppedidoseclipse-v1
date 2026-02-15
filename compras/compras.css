@@ -111,6 +111,61 @@
   justify-content: space-between;
 }
 
+.item-actions .qty-btn {
+  height: 32px;
+  min-width: 88px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(160deg, #151515 0%, #0a0a0a 100%);
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+}
+
+.item-actions .qty-btn:hover {
+  border-color: rgba(253, 191, 0, 0.55);
+  transform: translateY(-1px);
+}
+
+.item-actions .qty-btn:active {
+  transform: translateY(0);
+}
+
+.item-actions .add-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(253, 191, 0, 0.35);
+  background: linear-gradient(
+    145deg,
+    rgba(253, 191, 0, 0.22) 0%,
+    rgba(253, 191, 0, 0.08) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  color: var(--brand);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.14s ease, filter 0.14s ease;
+}
+
+.item-actions .add-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.item-actions .add-btn:active {
+  transform: translateY(0);
+}
+
+.item-actions .add-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .qty-btn {
   height: 38px;
   min-width: 56px;
