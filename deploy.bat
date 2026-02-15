@@ -184,19 +184,20 @@ where node >nul 2>nul
 if errorlevel 1 (
   echo Node nao encontrado. Pulando geracao do token criptografado do Admin.
 ) else (
+  if not exist ".secrets" mkdir ".secrets" >nul 2>nul
   if exist "admin\\admin.js" (
     findstr /C:"const embeddedEncryptedToken = null" "admin\\admin.js" >nul 2>nul
     if not errorlevel 1 (
       set "DO_ENCRYPT=N"
       set /p DO_ENCRYPT=Gerar ou atualizar token criptografado do Admin? [s/N]: 
       if /I "!DO_ENCRYPT!"=="S" (
+        set "TOKEN_FILE=%SCRIPT_DIR%.secrets\\github_token.txt"
         powershell -NoProfile -Command ^
           "$ErrorActionPreference='Stop';" ^
-          "$tokenPath='.secrets\\github_token.txt';" ^
-          "$tokenPath=(Resolve-Path $tokenPath -ErrorAction SilentlyContinue);" ^
-          "if (-not $tokenPath) { throw 'Arquivo nao encontrado: .secrets\\github_token.txt' }" ^
-          "$pt=(Get-Content $tokenPath -Raw).Trim();" ^
-          "if (-not $pt) { throw 'Token vazio em .secrets\\github_token.txt' }" ^
+          "$tokenPath=$env:TOKEN_FILE;" ^
+          "if (-not (Test-Path -LiteralPath $tokenPath)) { throw ('Arquivo nao encontrado: ' + $tokenPath) }" ^
+          "$pt=(Get-Content -LiteralPath $tokenPath -Raw).Trim();" ^
+          "if (-not $pt) { throw ('Token vazio em ' + $tokenPath) }" ^
           "$k=Read-Host 'Chave do Admin' -AsSecureString;" ^
           "$pk=[Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($k));" ^
           "$inputText=$pt + \"`n\" + $pk;" ^
