@@ -144,18 +144,26 @@ async function saveToGitHub() {
   const { owner, repo, branch, path } = settings;
   let token = decodeTokenFromStorage();
   if (!token) {
+    if (!embeddedEncryptedToken) {
+      alert("Token criptografado não configurado no admin/admin.js.");
+      return;
+    }
+
+    // Ask for the key; if user cancels, stop silently.
     if (!cachedPassphrase) cachedPassphrase = await promptForPassphrase();
-    if (cachedPassphrase) {
-      try {
-        token = await decryptEmbeddedToken(cachedPassphrase);
-      } catch (_err) {
-        token = "";
-      }
+    if (!cachedPassphrase) return;
+
+    try {
+      token = await decryptEmbeddedToken(cachedPassphrase);
+    } catch (_err) {
+      cachedPassphrase = "";
+      alert("Chave incorreta. Tente novamente.");
+      return;
     }
   }
 
   if (!owner || !repo || !token) {
-    alert("Token indisponÃ­vel. Configure o token criptografado (embeddedEncryptedToken).");
+    alert("Token indisponível.");
     return;
   }
 
