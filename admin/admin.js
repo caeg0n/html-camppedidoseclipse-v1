@@ -1,4 +1,4 @@
-const editor = document.getElementById("editor");
+﻿const editor = document.getElementById("editor");
 const loadBtn = document.getElementById("load-file");
 const downloadBtn = document.getElementById("download-file");
 const copyBtn = document.getElementById("copy-file");
@@ -13,7 +13,7 @@ const storageKey = "menuAdminSettings";
 const tokenStorageKey = "menuAdminTokenB64";
 // Encrypted token blob (AES-GCM). Generate once with the helper script and paste here.
 // Format: { saltB64, ivB64, dataB64, iterations }
-const embeddedEncryptedToken = null;
+const embeddedEncryptedToken = { "saltB64": "JyRbzbu/glycFsRcLwB9YQ==", "ivB64": "7gHnqhGZc8MqIBSt", "dataB64": "KDGGPgwPkRWmeo8lN9o8cw3qo9U2PtKclPnO6TMuxZXL2iMzsaV9B2yJ3JZ7Rser7jhJfJ+whaU=", "iterations": 210000 };
 const defaultSettings = {
   owner: ownerInput.value,
   repo: repoInput.value,
@@ -33,8 +33,8 @@ async function loadFromSite() {
       return;
     }
     editor.value =
-      "// Não foi possível carregar menu-data.js automaticamente.\n" +
-      "// Cole o conteúdo aqui e edite.\n";
+      "// NÃ£o foi possÃ­vel carregar menu-data.js automaticamente.\n" +
+      "// Cole o conteÃºdo aqui e edite.\n";
   }
 }
 
@@ -155,7 +155,7 @@ async function saveToGitHub() {
   }
 
   if (!owner || !repo || !token) {
-    alert("Token indisponível. Configure o token criptografado (embeddedEncryptedToken).");
+    alert("Token indisponÃ­vel. Configure o token criptografado (embeddedEncryptedToken).");
     return;
   }
 
@@ -214,3 +214,4 @@ saveRemoteBtn.addEventListener("click", saveToGitHub);
 
 loadFromSite();
 const settings = loadSettings();
+
