@@ -4,12 +4,18 @@ const downloadBtn = document.getElementById("download-file");
 const copyBtn = document.getElementById("copy-file");
 const saveRemoteBtn = document.getElementById("save-remote");
 
+const ownerInput = document.getElementById("owner");
+const repoInput = document.getElementById("repo");
+const branchInput = document.getElementById("branch");
+const pathInput = document.getElementById("path");
+const tokenInput = document.getElementById("token");
+
 const storageKey = "menuAdminSettings";
 const defaultSettings = {
-  owner: "caeg0n",
-  repo: "react-eclipsecardapio-v1",
-  branch: "main",
-  path: "menu-data.js",
+  owner: ownerInput.value,
+  repo: repoInput.value,
+  branch: branchInput.value,
+  path: pathInput.value,
   token: ""
 };
 
