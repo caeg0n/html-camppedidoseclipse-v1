@@ -5,7 +5,7 @@ window.MENU_DATA = [
     note: "Tamanhos e valores do cardápio original.",
     groups: [
       {
-        title: "Tamanhos",
+        title: "Tamanhosiii",
         items: [
           { name: "Broto (individual)", price: "R$ 25,00" },
           { name: "Pequena (4 pedaços)", price: "R$ 45,00" },
