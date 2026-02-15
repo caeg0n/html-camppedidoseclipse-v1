@@ -1,5 +1,61 @@
 const menuData = Array.isArray(window.MENU_DATA) ? window.MENU_DATA : [];
 
+function parsePriceToNumber(price) {
+  if (!price) return Number.POSITIVE_INFINITY;
+  const normalized = String(price)
+    .replace(/[^\d,.-]/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  const value = Number(normalized);
+  return Number.isFinite(value) ? value : Number.POSITIVE_INFINITY;
+}
+
+function sortItemsIfNeeded(items, sortByPrice) {
+  if (!Array.isArray(items)) return [];
+  if (!sortByPrice) return items;
+  return [...items].sort((a, b) => parsePriceToNumber(a.price) - parsePriceToNumber(b.price));
+}
+
+function renderItems(items, sortByPrice = false) {
+  const finalItems = sortItemsIfNeeded(items, sortByPrice);
+  return `
+    <div class="menu-grid">
+      ${finalItems
+        .map(
+          (item) => `
+          <article class="item">
+            <div class="item-top">
+              <h3 class="item-name">${item.name}</h3>
+              ${item.price ? `<span class="price">${item.price}</span>` : ""}
+            </div>
+            ${item.desc ? `<p class="item-desc">${item.desc}</p>` : ""}
+          </article>
+        `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderSectionContent(section) {
+  if (Array.isArray(section.groups) && section.groups.length) {
+    return section.groups
+      .map(
+        (group) => `
+        <div class="menu-subgroup">
+          <div class="subgroup-head">
+            <h3>${group.title}</h3>
+            ${group.note ? `<p class="section-note">${group.note}</p>` : ""}
+          </div>
+          ${renderItems(group.items, section.sortByPrice || group.sortByPrice)}
+        </div>
+      `
+      )
+      .join("");
+  }
+  return renderItems(section.items, section.sortByPrice);
+}
+
 function renderMenu() {
   const nav = document.getElementById("menu-nav");
   const root = document.getElementById("menu-root");
@@ -22,21 +78,7 @@ function renderMenu() {
           <h2>${section.title}</h2>
           ${section.note ? `<p class="section-note">${section.note}</p>` : ""}
         </div>
-        <div class="menu-grid">
-          ${section.items
-            .map(
-              (item) => `
-              <article class="item">
-                <div class="item-top">
-                  <h3 class="item-name">${item.name}</h3>
-                  ${item.price ? `<span class="price">${item.price}</span>` : ""}
-                </div>
-                ${item.desc ? `<p class="item-desc">${item.desc}</p>` : ""}
-              </article>
-            `
-            )
-            .join("")}
-        </div>
+        ${renderSectionContent(section)}
       </section>
     `
     )

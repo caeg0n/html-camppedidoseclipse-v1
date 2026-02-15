@@ -84,8 +84,45 @@ footer {
 .hero-bike {
   width: 100%;
   max-width: 300px;
-  justify-self: end;
   animation: float 3.8s ease-in-out infinite;
+}
+
+.hero-delivery {
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.delivery-callout {
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 1px solid #303030;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.delivery-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #d6d6d6;
+}
+
+.delivery-phone {
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 800;
+  color: var(--brand);
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+
+.delivery-phone:hover {
+  color: #ffe08a;
 }
 
 @keyframes float {
@@ -168,6 +205,26 @@ section.menu-section {
   font-size: clamp(1.1rem, 2vw, 1.4rem);
 }
 
+.menu-subgroup + .menu-subgroup {
+  margin-top: 18px;
+}
+
+.subgroup-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin: 2px 0 10px;
+}
+
+.subgroup-head h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffd45a;
+}
+
 .section-note {
   margin: 0;
   color: #a8a8a8;
@@ -227,6 +284,112 @@ footer {
   padding: 8px 0 20px;
 }
 
+.slogan {
+  max-width: 1200px;
+  margin: 18px auto 10px;
+  padding: 0 4px;
+}
+
+.slogan-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid #2a2a2a;
+  padding: 26px;
+  background: radial-gradient(circle at 15% 20%, #2a1d04 0%, #0b0b0b 45%),
+    linear-gradient(135deg, #121212 0%, #0b0b0b 70%);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+}
+
+.slogan-orbit {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 209, 107, 0.4);
+  top: -80px;
+  right: -60px;
+  animation: orbit 18s linear infinite;
+}
+
+.slogan-orbit.orbit-two {
+  width: 140px;
+  height: 140px;
+  top: 40px;
+  right: 140px;
+  opacity: 0.5;
+  animation-duration: 12s;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.slogan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(253, 191, 0, 0.12);
+  border: 1px solid rgba(253, 191, 0, 0.35);
+  color: #ffd976;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 12px;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffd976;
+  box-shadow: 0 0 8px rgba(253, 191, 0, 0.8);
+}
+
+.slogan-card h2 {
+  margin: 0 0 12px;
+  font-size: clamp(1.2rem, 2.6vw, 1.8rem);
+}
+
+.slogan-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  color: #d7d7d7;
+}
+
+.slogan-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.98rem;
+}
+
+.slogan-icon {
+  font-size: 1.1rem;
+}
+
+.slogan-cta {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(253, 191, 0, 0.18), rgba(255, 214, 130, 0.05));
+  border: 1px solid rgba(253, 191, 0, 0.35);
+  font-weight: 700;
+  text-align: center;
+  color: #ffe6a6;
+  letter-spacing: 0.06em;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(18px);
@@ -245,11 +408,20 @@ footer {
   }
 
   .hero-bike,
+  .hero-delivery,
   .brand-mark {
     justify-self: center;
   }
 
+  .delivery-callout {
+    max-width: 280px;
+  }
+
   .menu-grid {
     grid-template-columns: 1fr;
+  }
+
+  .slogan-card {
+    padding: 22px;
   }
 }
