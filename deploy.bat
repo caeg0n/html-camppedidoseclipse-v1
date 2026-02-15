@@ -1,0 +1,263 @@
+@echo off
+setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+
+REM ============================================================
+REM Deploy automatizado para GitHub + GitHub Pages (site estatico)
+REM Uso:
+REM   deploy.bat
+REM   deploy.bat meu-usuario meu-repo
+REM   deploy.bat meu-usuario meu-repo cardapio.seudominio.com.br
+REM   deploy.bat meu-usuario meu-repo --provisorio
+REM Variaveis opcionais:
+REM   GITHUB_TOKEN   (obrigatorio para automacao completa)
+REM   GITHUB_USER    (opcional; se nao passar por argumento, pede no prompt)
+REM   GITHUB_REPO    (opcional; se nao passar por argumento, pede no prompt)
+REM   CUSTOM_DOMAIN  (opcional; dominio proprio para GitHub Pages)
+REM ============================================================
+
+set "SCRIPT_DIR=%~dp0"
+cd /d "%SCRIPT_DIR%"
+
+echo.
+echo [1/9] Validando pre-requisitos...
+
+where git >nul 2>nul
+if errorlevel 1 (
+  echo [ERRO] Git nao encontrado no PATH.
+  echo Instale o Git para Windows e tente novamente.
+  exit /b 1
+)
+
+where curl >nul 2>nul
+if errorlevel 1 (
+  echo [ERRO] curl nao encontrado no PATH.
+  echo Use Windows 10/11 atualizado ou instale curl.
+  exit /b 1
+)
+
+if not exist "index.html" (
+  echo [ERRO] index.html nao encontrado em "%SCRIPT_DIR%".
+  exit /b 1
+)
+if not exist "styles.css" (
+  echo [ERRO] styles.css nao encontrado em "%SCRIPT_DIR%".
+  exit /b 1
+)
+if not exist "script.js" (
+  echo [ERRO] script.js nao encontrado em "%SCRIPT_DIR%".
+  exit /b 1
+)
+
+set "OWNER=%~1"
+if "%OWNER%"=="" set "OWNER=%GITHUB_USER%"
+if "%OWNER%"=="" (
+  set /p OWNER=Informe o usuario/org do GitHub: 
+)
+
+set "REPO=%~2"
+if "%REPO%"=="" set "REPO=%GITHUB_REPO%"
+if "%REPO%"=="" (
+  set /p REPO=Informe o nome do repositorio: 
+)
+
+set "ARG3=%~3"
+set "PROVISIONAL_DEPLOY=1"
+if /I "%ARG3%"=="--provisorio" set "PROVISIONAL_DEPLOY=1"
+if /I "%ARG3%"=="provisorio" set "PROVISIONAL_DEPLOY=1"
+if /I "%ARG3%"=="--temporary" set "PROVISIONAL_DEPLOY=1"
+
+set "DOMAIN=%ARG3%"
+if /I "%ARG3%"=="--provisorio" set "DOMAIN="
+if /I "%ARG3%"=="provisorio" set "DOMAIN="
+if /I "%ARG3%"=="--temporary" set "DOMAIN="
+
+if not "%DOMAIN%"=="" (
+  set "PROVISIONAL_DEPLOY=0"
+) else (
+  if not "%CUSTOM_DOMAIN%"=="" (
+    set "DOMAIN=%CUSTOM_DOMAIN%"
+    set "PROVISIONAL_DEPLOY=0"
+  )
+)
+
+set "TOKEN=%GITHUB_TOKEN%"
+if "%TOKEN%"=="" (
+  set /p TOKEN=Informe seu GITHUB_TOKEN - classic com repo ou fine-grained com conteudo+pages: 
+)
+
+if "%OWNER%"=="" (
+  echo [ERRO] OWNER vazio.
+  exit /b 1
+)
+if "%REPO%"=="" (
+  echo [ERRO] REPO vazio.
+  exit /b 1
+)
+if "%TOKEN%"=="" (
+  echo [ERRO] TOKEN vazio.
+  exit /b 1
+)
+
+set "REMOTE_URL=https://github.com/%OWNER%/%REPO%.git"
+set "API_REPO=https://api.github.com/repos/%OWNER%/%REPO%"
+
+echo.
+echo [2/9] Criando repositorio remoto se nao existir...
+curl -s -o NUL -w "%%{http_code}" ^
+  -H "Authorization: token %TOKEN%" ^
+  -H "Accept: application/vnd.github+json" ^
+  "%API_REPO%" > "%TEMP%\gh_repo_status.tmp"
+set /p REPO_STATUS=<"%TEMP%\gh_repo_status.tmp"
+del /q "%TEMP%\gh_repo_status.tmp" >nul 2>nul
+
+if "%REPO_STATUS%"=="404" (
+  echo Repositorio nao existe. Criando...
+  curl -s -o "%TEMP%\gh_create_repo.json" -w "%%{http_code}" ^
+    -X POST ^
+    -H "Authorization: token %TOKEN%" ^
+    -H "Accept: application/vnd.github+json" ^
+    https://api.github.com/user/repos ^
+    -d "{\"name\":\"%REPO%\",\"private\":false,\"auto_init\":false}" > "%TEMP%\gh_create_status.tmp"
+  set /p CREATE_STATUS=<"%TEMP%\gh_create_status.tmp"
+  del /q "%TEMP%\gh_create_status.tmp" >nul 2>nul
+  if not "%CREATE_STATUS%"=="201" (
+    echo [ERRO] Falha ao criar repositorio. HTTP %CREATE_STATUS%
+    echo Resposta da API:
+    type "%TEMP%\gh_create_repo.json"
+    del /q "%TEMP%\gh_create_repo.json" >nul 2>nul
+    exit /b 1
+  )
+  del /q "%TEMP%\gh_create_repo.json" >nul 2>nul
+  echo Repositorio criado com sucesso.
+) else (
+  if "%REPO_STATUS%"=="200" (
+    echo Repositorio remoto ja existe.
+  ) else (
+    echo [ERRO] Nao foi possivel consultar repositorio remoto. HTTP %REPO_STATUS%
+    exit /b 1
+  )
+)
+
+echo.
+echo [3/9] Preparando repositorio local...
+if not exist ".git" (
+  git init >nul
+  git branch -M main
+)
+
+for /f "delims=" %%A in ('git branch --show-current 2^>nul') do set "CUR_BRANCH=%%A"
+if /i not "%CUR_BRANCH%"=="main" (
+  git branch -M main >nul 2>nul
+)
+
+git remote get-url origin >nul 2>nul
+if errorlevel 1 (
+  git remote add origin "%REMOTE_URL%"
+) else (
+  git remote set-url origin "%REMOTE_URL%"
+)
+
+echo.
+echo [4/9] Criando .gitignore minimo...
+if not exist ".gitignore" (
+  > ".gitignore" (
+    echo .DS_Store
+    echo Thumbs.db
+    echo *.log
+    echo .venv/
+    echo preview-*.png
+  )
+)
+
+echo.
+echo [5/9] Configurando dominio customizado...
+if "%PROVISIONAL_DEPLOY%"=="1" (
+  if exist "CNAME" (
+    del /q "CNAME" >nul 2>nul
+    echo CNAME removido para deploy provisório.
+  ) else (
+    echo Deploy provisório ativado - sem CNAME.
+  )
+) else if not "%DOMAIN%"=="" (
+  > "CNAME" echo %DOMAIN%
+  echo CNAME criado/atualizado: %DOMAIN%
+) else (
+  if exist "CNAME" (
+    echo CNAME existente mantido: 
+    set /p EXISTING_CNAME=<CNAME
+    echo !EXISTING_CNAME!
+  ) else (
+    echo Nenhum dominio informado. Site sera publicado no github.io.
+  )
+)
+
+echo.
+echo [6/9] Commitando arquivos...
+git add .
+git diff --cached --quiet
+if errorlevel 1 (
+  git commit -m "Deploy cardapio web" >nul
+) else (
+  echo Nenhuma alteracao nova para commit.
+)
+
+echo.
+echo [7/9] Enviando para GitHub (branch main)...
+git push -u origin main
+if errorlevel 1 (
+  echo [ERRO] Falha no push. Verifique permissao do token/repositorio.
+  exit /b 1
+)
+
+echo.
+echo [8/9] Ativando GitHub Pages via API...
+curl -s -o "%TEMP%\gh_pages.json" -w "%%{http_code}" ^
+  -X POST ^
+  -H "Authorization: token %TOKEN%" ^
+  -H "Accept: application/vnd.github+json" ^
+  "%API_REPO%/pages" ^
+  -d "{\"source\":{\"branch\":\"main\",\"path\":\"/\"}}" > "%TEMP%\gh_pages_status.tmp"
+set /p PAGES_STATUS=<"%TEMP%\gh_pages_status.tmp"
+del /q "%TEMP%\gh_pages_status.tmp" >nul 2>nul
+
+if "%PAGES_STATUS%"=="201" (
+  echo GitHub Pages ativado com sucesso.
+) else (
+  if "%PAGES_STATUS%"=="409" (
+    echo GitHub Pages ja estava configurado.
+  ) else (
+    if "%PAGES_STATUS%"=="422" (
+      echo GitHub Pages provavelmente ja ativo - ou sem permissao para alterar.
+    ) else (
+      echo [AVISO] Nao foi possivel ativar Pages automaticamente. HTTP %PAGES_STATUS%
+      echo Resposta:
+      type "%TEMP%\gh_pages.json"
+    )
+  )
+)
+del /q "%TEMP%\gh_pages.json" >nul 2>nul
+
+echo.
+echo [9/9] Publicacao concluida.
+if not "%DOMAIN%"=="" (
+  echo URL final apos DNS: https://%DOMAIN%/
+  echo.
+  echo Configure no DNS do dominio:
+  echo 1^) Se usar www:
+  echo    - CNAME  www  %OWNER%.github.io
+  echo 2^) Para raiz/apex ^(opcional, sem www^), crie A records:
+  echo    - 185.199.108.153
+  echo    - 185.199.109.153
+  echo    - 185.199.110.153
+  echo    - 185.199.111.153
+  echo.
+  echo Depois, no GitHub repo ^> Settings ^> Pages:
+  echo - confirme o dominio customizado
+  echo - marque \"Enforce HTTPS\" quando habilitar
+) else (
+  echo URL esperada: https://%OWNER%.github.io/%REPO%/
+)
+echo Pode levar alguns minutos para ficar online.
+echo.
+
+exit /b 0

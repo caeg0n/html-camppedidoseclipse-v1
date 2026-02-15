@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eclipse Lanchonete e Pizzaria | Cardápio</title>
+    <meta
+      name="description"
+      content="Cardápio digital da Eclipse Lanchonete e Pizzaria."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-glow bg-glow-left"></div>
+    <div class="bg-glow bg-glow-right"></div>
+
+    <header class="hero reveal">
+      <img
+        class="brand-mark"
+        src="reference-page-main.png"
+        alt="Logo Eclipse Lanchonete e Pizzaria"
+      />
+      <div class="hero-copy">
+        <p class="kicker">Cardápio Digital</p>
+        <h1>ECLIPSE LANCHONETE E PIZZARIA</h1>
+        <p>
+          Sabor de verdade, porções caprichadas e delivery rápido.
+          <strong>(66) 99212-0997</strong>
+        </p>
+      </div>
+      <img
+        class="hero-bike"
+        src="reference-page-secondary.png"
+        alt="Ilustração de delivery"
+      />
+    </header>
+
+    <nav class="menu-nav reveal" id="menu-nav"></nav>
+
+    <main id="menu-root"></main>
+
+    <footer class="reveal">
+      <p>Consulte o garçom para variações, bebidas e opções do dia.</p>
+    </footer>
+
+    <script src="menu-data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
