@@ -192,9 +192,10 @@ if errorlevel 1 (
       if /I "!DO_ENCRYPT!"=="S" (
         powershell -NoProfile -Command ^
           "$ErrorActionPreference='Stop';" ^
-          "$t=Read-Host 'GitHub token para salvar menu-data.js' -AsSecureString;" ^
+          "$tokenPath='.secrets\\github_token.txt';" ^
+          "$pt='';" ^
+          "if (Test-Path $tokenPath) { $pt=(Get-Content $tokenPath -Raw).Trim() } else { $t=Read-Host 'GitHub token para salvar menu-data.js' -AsSecureString; $pt=[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($t)) }" ^
           "$k=Read-Host 'Chave do Admin' -AsSecureString;" ^
-          "$pt=[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($t));" ^
           "$pk=[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($k));" ^
           "$blob=($pt + \"`n\" + $pk) | node admin\\encrypt-token.mjs --stdin;" ^
           "Set-Content -Path admin\\token-blob.json -Value $blob -Encoding utf8;" ^

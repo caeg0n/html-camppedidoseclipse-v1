@@ -3,3 +3,5 @@ Thumbs.db
 *.log
 .venv/
 preview-*.png
+.secrets/
+.env.local
