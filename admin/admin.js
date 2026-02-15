@@ -2,6 +2,15 @@ const editor = document.getElementById("editor");
 const loadBtn = document.getElementById("load-file");
 const downloadBtn = document.getElementById("download-file");
 const copyBtn = document.getElementById("copy-file");
+const saveRemoteBtn = document.getElementById("save-remote");
+
+const ownerInput = document.getElementById("owner");
+const repoInput = document.getElementById("repo");
+const branchInput = document.getElementById("branch");
+const pathInput = document.getElementById("path");
+const tokenInput = document.getElementById("token");
+
+const storageKey = "menuAdminSettings";
 
 async function loadFromSite() {
   try {
@@ -37,9 +46,107 @@ async function copyAll() {
   }
 }
 
+function loadSettings() {
+  const saved = localStorage.getItem(storageKey);
+  if (saved) {
+    const data = JSON.parse(saved);
+    ownerInput.value = data.owner || "";
+    repoInput.value = data.repo || "";
+    branchInput.value = data.branch || "main";
+    pathInput.value = data.path || "menu-data.js";
+    tokenInput.value = data.token || "";
+    return;
+  }
+  ownerInput.value = "";
+  repoInput.value = "";
+  branchInput.value = "main";
+  pathInput.value = "menu-data.js";
+}
+
+function saveSettings() {
+  localStorage.setItem(
+    storageKey,
+    JSON.stringify({
+      owner: ownerInput.value.trim(),
+      repo: repoInput.value.trim(),
+      branch: branchInput.value.trim() || "main",
+      path: pathInput.value.trim() || "menu-data.js",
+      token: tokenInput.value.trim()
+    })
+  );
+}
+
+function encodeBase64(content) {
+  const bytes = new TextEncoder().encode(content);
+  let binary = "";
+  bytes.forEach((b) => (binary += String.fromCharCode(b)));
+  return btoa(binary);
+}
+
+async function saveToGitHub() {
+  const owner = ownerInput.value.trim();
+  const repo = repoInput.value.trim();
+  const branch = (branchInput.value.trim() || "main");
+  const path = (pathInput.value.trim() || "menu-data.js");
+  const token = tokenInput.value.trim();
+
+  if (!owner || !repo || !token) {
+    alert("Preencha owner, repositório e token.");
+    return;
+  }
+
+  saveSettings();
+  saveRemoteBtn.textContent = "Salvando...";
+  saveRemoteBtn.disabled = true;
+
+  const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  try {
+    const current = await fetch(`${apiBase}?ref=${branch}`, {
+      headers: { Authorization: `token ${token}` }
+    });
+    let sha = null;
+    if (current.ok) {
+      const data = await current.json();
+      sha = data.sha;
+    }
+
+    const content = editor.value.trim() + "\n";
+    const body = {
+      message: "Atualiza menu-data.js via admin",
+      content: encodeBase64(content),
+      branch
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(apiBase, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Falha ao salvar no GitHub");
+    }
+
+    saveRemoteBtn.textContent = "Salvo no GitHub";
+    setTimeout(() => (saveRemoteBtn.textContent = "Salvar no GitHub"), 1500);
+  } catch (err) {
+    alert(`Erro: ${err.message}`);
+    saveRemoteBtn.textContent = "Salvar no GitHub";
+  } finally {
+    saveRemoteBtn.disabled = false;
+  }
+}
+
 loadBtn.addEventListener("click", loadFromSite);
 
 downloadBtn.addEventListener("click", downloadFile);
 copyBtn.addEventListener("click", copyAll);
+saveRemoteBtn.addEventListener("click", saveToGitHub);
 
 loadFromSite();
+loadSettings();

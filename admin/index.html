@@ -23,12 +23,36 @@
       </div>
       <div class="admin-actions">
         <button id="load-file" class="btn">Carregar do site</button>
-        <button id="download-file" class="btn btn-primary">Baixar menu-data.js</button>
+        <button id="download-file" class="btn">Baixar menu-data.js</button>
         <button id="copy-file" class="btn btn-ghost">Copiar tudo</button>
+        <button id="save-remote" class="btn btn-primary">Salvar no GitHub</button>
       </div>
     </header>
 
     <main>
+      <section class="remote-settings">
+        <div class="field">
+          <label for="owner">Owner</label>
+          <input id="owner" type="text" placeholder="ex: caeg0n" />
+        </div>
+        <div class="field">
+          <label for="repo">Repositório</label>
+          <input id="repo" type="text" placeholder="ex: react-eclipsecardapio-v1" />
+        </div>
+        <div class="field">
+          <label for="branch">Branch</label>
+          <input id="branch" type="text" placeholder="main" />
+        </div>
+        <div class="field">
+          <label for="path">Caminho</label>
+          <input id="path" type="text" placeholder="menu-data.js" />
+        </div>
+        <div class="field field-token">
+          <label for="token">Token do GitHub</label>
+          <input id="token" type="password" placeholder="ghp_..." />
+          <p class="hint">Permissões: repo (ou contents:write).</p>
+        </div>
+      </section>
       <textarea id="editor" spellcheck="false"></textarea>
     </main>
 
