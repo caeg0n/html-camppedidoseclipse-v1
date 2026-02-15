@@ -87,14 +87,7 @@ main {
 }
 
 .remote-settings {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 12px;
-  padding: 14px;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  background: #101010;
+  display: none;
 }
 
 .field {
@@ -121,13 +114,6 @@ main {
 
 .field-token {
   grid-column: span 4;
-  display: none;
-}
-
-.field-toggle {
-  grid-column: span 4;
-  display: flex;
-  justify-content: flex-end;
 }
 
 .hint {

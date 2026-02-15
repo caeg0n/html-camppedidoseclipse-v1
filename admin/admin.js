@@ -3,16 +3,15 @@ const loadBtn = document.getElementById("load-file");
 const downloadBtn = document.getElementById("download-file");
 const copyBtn = document.getElementById("copy-file");
 const saveRemoteBtn = document.getElementById("save-remote");
-const toggleTokenBtn = document.getElementById("toggle-token");
-
-const ownerInput = document.getElementById("owner");
-const repoInput = document.getElementById("repo");
-const branchInput = document.getElementById("branch");
-const pathInput = document.getElementById("path");
-const tokenInput = document.getElementById("token");
-const tokenField = document.querySelector(".field-token");
 
 const storageKey = "menuAdminSettings";
+const defaultSettings = {
+  owner: "caeg0n",
+  repo: "react-eclipsecardapio-v1",
+  branch: "main",
+  path: "menu-data.js",
+  token: ""
+};
 
 async function loadFromSite() {
   try {
@@ -51,31 +50,13 @@ async function copyAll() {
 function loadSettings() {
   const saved = localStorage.getItem(storageKey);
   if (saved) {
-    const data = JSON.parse(saved);
-    ownerInput.value = data.owner || "caeg0n";
-    repoInput.value = data.repo || "react-eclipsecardapio-v1";
-    branchInput.value = data.branch || "main";
-    pathInput.value = data.path || "menu-data.js";
-    tokenInput.value = data.token || "";
-    return;
+    return { ...defaultSettings, ...JSON.parse(saved) };
   }
-  ownerInput.value = "caeg0n";
-  repoInput.value = "react-eclipsecardapio-v1";
-  branchInput.value = "main";
-  pathInput.value = "menu-data.js";
+  return { ...defaultSettings };
 }
 
 function saveSettings() {
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify({
-      owner: ownerInput.value.trim(),
-      repo: repoInput.value.trim(),
-      branch: branchInput.value.trim() || "main",
-      path: pathInput.value.trim() || "menu-data.js",
-      token: tokenInput.value.trim()
-    })
-  );
+  localStorage.setItem(storageKey, JSON.stringify(settings));
 }
 
 function encodeBase64(content) {
@@ -86,14 +67,10 @@ function encodeBase64(content) {
 }
 
 async function saveToGitHub() {
-  const owner = ownerInput.value.trim();
-  const repo = repoInput.value.trim();
-  const branch = (branchInput.value.trim() || "main");
-  const path = (pathInput.value.trim() || "menu-data.js");
-  const token = tokenInput.value.trim();
+  const { owner, repo, branch, path, token } = settings;
 
   if (!owner || !repo || !token) {
-    alert("Preencha owner, repositório e token.");
+    alert("Token não encontrado. Defina o token no localStorage antes de salvar.");
     return;
   }
 
@@ -149,11 +126,6 @@ loadBtn.addEventListener("click", loadFromSite);
 downloadBtn.addEventListener("click", downloadFile);
 copyBtn.addEventListener("click", copyAll);
 saveRemoteBtn.addEventListener("click", saveToGitHub);
-toggleTokenBtn.addEventListener("click", () => {
-  const isHidden = tokenField.style.display === "" || tokenField.style.display === "none";
-  tokenField.style.display = isHidden ? "block" : "none";
-  toggleTokenBtn.textContent = isHidden ? "Ocultar token" : "Mostrar token";
-});
 
 loadFromSite();
-loadSettings();
+const settings = loadSettings();
