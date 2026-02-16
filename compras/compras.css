@@ -189,6 +189,23 @@
   width: fit-content;
 }
 
+.item-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  font-size: 0.98rem;
+  color: #f1f1f1;
+  background: linear-gradient(160deg, #141414 0%, #0d0d0d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+}
+
+.item-total strong {
+  color: rgba(253, 191, 0, 0.98);
+}
+
 .item-qty {
   display: inline-flex;
   gap: 10px;

@@ -299,6 +299,7 @@
     const titleEl = $("#item-title");
     const descEl = $("#item-desc");
     const priceEl = $("#item-price");
+    const totalEl = $("#item-total");
     const qtyEl = $("#item-qty");
     const addBtn = $("#item-add");
     let currentItem = null;
@@ -308,6 +309,12 @@
       const q = Math.max(1, Math.min(99, Number(next || 1)));
       currentQty = q;
       qtyEl.textContent = String(q);
+      if (currentItem) {
+        const cents = parsePriceToCents(currentItem.price);
+        totalEl.textContent = Number.isFinite(cents)
+          ? formatCentsBRL(cents * currentQty)
+          : "Sem preço";
+      }
     }
 
     document.addEventListener("click", (e) => {
@@ -324,10 +331,12 @@
       const cents = parsePriceToCents(item.price);
       if (Number.isFinite(cents) && item.price) {
         priceEl.textContent = item.price;
+        totalEl.textContent = formatCentsBRL(cents * currentQty);
         addBtn.disabled = false;
         addBtn.textContent = "Adicionar ao carrinho";
       } else {
         priceEl.textContent = "Sem preço";
+        totalEl.textContent = "Sem preço";
         addBtn.disabled = true;
         addBtn.textContent = "Indisponível";
       }
