@@ -4,10 +4,28 @@
 
 .delivery-row {
   margin-top: 6px;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
+  gap: 14px;
+}
+
+.cart-section {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+}
+
+.cart-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #d6d6d6;
+}
+
+.delivery-section {
+  display: flex;
   justify-content: center;
-  gap: 10px;
 }
 
 .cart-fab {
@@ -555,4 +573,11 @@
 }
 
 @media (max-width: 760px) {
+  .delivery-row {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-section {
+    justify-content: center;
+  }
 }
