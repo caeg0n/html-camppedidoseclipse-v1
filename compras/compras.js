@@ -91,6 +91,33 @@
     return { qty, totalCents: total };
   }
 
+  function buildWhatsAppMessage(cart) {
+    const keys = Object.keys(cart.items || {});
+    if (!keys.length) return "";
+
+    const lines = ["Pedido - Eclipse Lanchonete e Pizzaria", ""];
+    keys.sort((a, b) => {
+      const ia = cart.items[a];
+      const ib = cart.items[b];
+      return String(ia?.name || "").localeCompare(String(ib?.name || ""), "pt-BR");
+    });
+
+    for (const k of keys) {
+      const it = cart.items[k];
+      const subtotal = (it.qty || 0) * (it.priceCents || 0);
+      lines.push(`${it.qty}x ${it.name} - ${formatCentsBRL(subtotal)}`);
+    }
+
+    const totals = cartTotals(cart);
+    lines.push("");
+    lines.push(`Total: ${formatCentsBRL(totals.totalCents)}`);
+    lines.push("");
+    lines.push("Endereço:");
+    lines.push("Forma de pagamento:");
+
+    return lines.join("\n");
+  }
+
   function bump(el, cls) {
     if (!el) return;
     el.classList.remove(cls);
@@ -106,6 +133,8 @@
     badge.textContent = String(qty);
     badge.style.display = qty > 0 ? "grid" : "none";
     $("#cart-total").textContent = formatCentsBRL(totalCents);
+    const waBtn = $("#cart-whatsapp");
+    if (waBtn) waBtn.disabled = qty === 0;
   }
 
   function renderCartModal() {
@@ -524,6 +553,15 @@
     $("#cart-open").addEventListener("click", () => {
       renderCartModal();
       showDialogSafe($("#cart-dialog"));
+    });
+
+    $("#cart-whatsapp").addEventListener("click", () => {
+      const cart = getCart();
+      const msg = buildWhatsAppMessage(cart);
+      if (!msg) return;
+      const phone = "5566992120997";
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
     });
 
     $("#cart-clear").addEventListener("click", () => {

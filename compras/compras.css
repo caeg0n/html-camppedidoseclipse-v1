@@ -552,6 +552,7 @@
   display: flex;
   gap: 10px;
   justify-content: end;
+  flex-wrap: wrap;
 }
 
 .cart-clear,
@@ -572,6 +573,21 @@
   border-color: rgba(253, 191, 0, 0.35);
   background: linear-gradient(145deg, rgba(253, 191, 0, 0.22) 0%, rgba(253, 191, 0, 0.06) 100%);
   color: rgba(253, 191, 0, 0.98);
+}
+
+.cart-whatsapp {
+  border-radius: 12px;
+  border: 1px solid rgba(37, 211, 102, 0.45);
+  padding: 10px 12px;
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(145deg, rgba(37, 211, 102, 0.22) 0%, rgba(37, 211, 102, 0.06) 100%);
+  color: #bff5d2;
+}
+
+.cart-whatsapp:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .empty-cart {
