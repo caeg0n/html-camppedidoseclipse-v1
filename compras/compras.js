@@ -111,7 +111,7 @@
     const keys = Object.keys(cart.items || {});
     if (!keys.length) return "";
 
-    const lines = ["Olá! 👋", "Pedido para Eclipse Lanchonete e Pizzaria", ""];
+    const lines = ["Olá!", "Pedido Eclipse Lanchonete e Pizzaria 🍕", "", "Itens:"];
     keys.sort((a, b) => {
       const ia = cart.items[a];
       const ib = cart.items[b];
@@ -122,15 +122,12 @@
       const it = cart.items[k];
       const subtotal = (it.qty || 0) * (it.priceCents || 0);
       const emoji = pickEmoji(it.name);
-      lines.push(`${it.qty}x ${it.name} ${emoji} - ${formatCentsBRL(subtotal)}`);
+      lines.push(`• ${it.qty}x ${it.name} — ${formatCentsBRL(subtotal)} ${emoji}`);
     }
 
     const totals = cartTotals(cart);
     lines.push("");
     lines.push(`Total: ${formatCentsBRL(totals.totalCents)}`);
-    lines.push("");
-    lines.push("Endereço:");
-    lines.push("Forma de pagamento:");
     lines.push("");
     lines.push("Obrigado!");
 
