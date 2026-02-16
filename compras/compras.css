@@ -7,13 +7,14 @@
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 14px;
+  column-gap: 16px;
 }
 
 .cart-section {
   display: grid;
   gap: 6px;
   justify-items: center;
+  min-width: 72px;
 }
 
 .cart-label {
@@ -26,6 +27,8 @@
 .delivery-section {
   display: flex;
   justify-content: center;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .cart-fab {
@@ -579,5 +582,7 @@
 
   .delivery-section {
     justify-content: center;
+    padding-left: 0;
+    border-left: 0;
   }
 }
