@@ -153,18 +153,19 @@
     updateCartUI();
   }
 
-  function addItemToCart(item, qtyToAdd) {
-    const priceCents = parsePriceToCents(item.price);
+  function addItemToCart(item, qtyToAdd, overrides = {}) {
+    const priceCents =
+      Number.isFinite(overrides.priceCents) ? overrides.priceCents : parsePriceToCents(item.price);
     if (!Number.isFinite(priceCents)) return;
 
     const qty = Math.max(1, Math.min(99, Number(qtyToAdd || 1)));
-    const key = item.key;
+    const key = overrides.key || item.key;
     const cart = getCart();
     const prev = cart.items[key];
     const nextQty = (prev?.qty || 0) + qty;
     cart.items[key] = {
-      name: item.name,
-      desc: item.desc || "",
+      name: overrides.name || item.name,
+      desc: overrides.desc || item.desc || "",
       priceCents,
       qty: nextQty
     };
@@ -294,27 +295,58 @@
     return map;
   }
 
-  function wireEvents(itemIndex) {
+  function wireEvents(itemIndex, menuData) {
     const dlg = $("#item-dialog");
     const titleEl = $("#item-title");
     const descEl = $("#item-desc");
     const priceEl = $("#item-price");
     const totalEl = $("#item-total");
+    const sizeWrap = $("#item-size-wrap");
+    const sizeList = $("#item-sizes");
     const qtyEl = $("#item-qty");
     const addBtn = $("#item-add");
     let currentItem = null;
     let currentQty = 1;
+    let currentPriceCents = null;
+    let currentName = null;
+    let currentKey = null;
+    let currentSizeLabel = null;
+
+    const pizzaSection = Array.isArray(menuData)
+      ? menuData.find((s) => s && s.id === "pizzas")
+      : null;
+    const sizeGroup = pizzaSection?.groups?.find((g) => /tamanho/i.test(g.title || ""));
+    const pizzaSizes = Array.isArray(sizeGroup?.items) ? sizeGroup.items : [];
 
     function setQty(next) {
       const q = Math.max(1, Math.min(99, Number(next || 1)));
       currentQty = q;
       qtyEl.textContent = String(q);
-      if (currentItem) {
-        const cents = parsePriceToCents(currentItem.price);
-        totalEl.textContent = Number.isFinite(cents)
-          ? formatCentsBRL(cents * currentQty)
-          : "Sem preço";
+      if (currentItem && Number.isFinite(currentPriceCents)) {
+        totalEl.textContent = formatCentsBRL(currentPriceCents * currentQty);
+      } else {
+        totalEl.textContent = "Sem preço";
       }
+    }
+
+    function setPriceFromSize(size) {
+      const cents = parsePriceToCents(size?.price);
+      if (!Number.isFinite(cents)) {
+        currentPriceCents = null;
+        priceEl.textContent = "Sem preço";
+        totalEl.textContent = "Sem preço";
+        addBtn.disabled = true;
+        addBtn.textContent = "Indisponível";
+        return;
+      }
+      currentPriceCents = cents;
+      priceEl.textContent = size.price;
+      totalEl.textContent = formatCentsBRL(cents * currentQty);
+      addBtn.disabled = false;
+      addBtn.textContent = "Adicionar ao carrinho";
+      currentSizeLabel = size.name || "Tamanho";
+      currentName = `${currentItem?.name || "Pizza"} - ${currentSizeLabel}`;
+      currentKey = `${currentItem?.key || "pizza"}::${currentSizeLabel}`;
     }
 
     document.addEventListener("click", (e) => {
@@ -323,22 +355,50 @@
       const key = itemEl.getAttribute("data-item-key");
       const item = itemIndex.get(key);
       if (!item) return;
+      if (item.sectionId === "pizzas" && /tamanho/i.test(item.groupTitle || "")) {
+        return;
+      }
       currentItem = item;
       setQty(1);
 
       titleEl.textContent = item.name || "Item";
       descEl.textContent = item.desc || "";
-      const cents = parsePriceToCents(item.price);
-      if (Number.isFinite(cents) && item.price) {
-        priceEl.textContent = item.price;
-        totalEl.textContent = formatCentsBRL(cents * currentQty);
-        addBtn.disabled = false;
-        addBtn.textContent = "Adicionar ao carrinho";
+      currentName = item.name || "Item";
+      currentKey = item.key;
+      currentSizeLabel = null;
+
+      if (item.sectionId === "pizzas" && Array.isArray(pizzaSizes) && pizzaSizes.length) {
+        sizeWrap.style.display = "";
+        sizeList.innerHTML = pizzaSizes
+          .map((s, idx) => {
+            const label = escapeHtml(s.name || "");
+            const price = escapeHtml(s.price || "");
+            const active = idx === 0 ? "is-active" : "";
+            return `
+              <button class="size-chip ${active}" type="button" data-idx="${idx}">
+                <span class="size-name">${label}</span>
+                <span class="size-price">${price}</span>
+              </button>
+            `;
+          })
+          .join("");
+        const firstSize = pizzaSizes[0];
+        setPriceFromSize(firstSize);
       } else {
-        priceEl.textContent = "Sem preço";
-        totalEl.textContent = "Sem preço";
-        addBtn.disabled = true;
-        addBtn.textContent = "Indisponível";
+        sizeWrap.style.display = "none";
+        const cents = parsePriceToCents(item.price);
+        currentPriceCents = Number.isFinite(cents) ? cents : null;
+        if (Number.isFinite(cents) && item.price) {
+          priceEl.textContent = item.price;
+          totalEl.textContent = formatCentsBRL(cents * currentQty);
+          addBtn.disabled = false;
+          addBtn.textContent = "Adicionar ao carrinho";
+        } else {
+          priceEl.textContent = "Sem preço";
+          totalEl.textContent = "Sem preço";
+          addBtn.disabled = true;
+          addBtn.textContent = "Indisponível";
+        }
       }
 
       dlg.showModal();
@@ -347,11 +407,26 @@
     $("#item-inc").addEventListener("click", () => setQty(currentQty + 1));
     $("#item-dec").addEventListener("click", () => setQty(currentQty - 1));
 
+    sizeList.addEventListener("click", (e) => {
+      const btn = e.target.closest("button.size-chip");
+      if (!btn) return;
+      const idx = Number(btn.getAttribute("data-idx"));
+      if (!Number.isFinite(idx)) return;
+      const size = pizzaSizes[idx];
+      if (!size) return;
+      sizeList.querySelectorAll(".size-chip").forEach((el) => el.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      setPriceFromSize(size);
+    });
+
     addBtn.addEventListener("click", () => {
       if (!currentItem) return;
-      const cents = parsePriceToCents(currentItem.price);
-      if (!Number.isFinite(cents)) return;
-      addItemToCart(currentItem, currentQty);
+      if (!Number.isFinite(currentPriceCents)) return;
+      addItemToCart(currentItem, currentQty, {
+        priceCents: currentPriceCents,
+        name: currentName,
+        key: currentKey
+      });
       dlg.close();
     });
 
@@ -387,6 +462,11 @@
     $("#item-dialog").addEventListener("close", () => {
       currentItem = null;
       currentQty = 1;
+      currentPriceCents = null;
+      currentName = null;
+      currentKey = null;
+      currentSizeLabel = null;
+      sizeList.innerHTML = "";
     });
 
     // Keyboard shortcut: "c" opens cart.
@@ -450,7 +530,7 @@
     root.innerHTML = menuData.map(renderSection).join("");
 
     const itemIndex = buildItemIndex(menuData);
-    wireEvents(itemIndex);
+    wireEvents(itemIndex, menuData);
     updateCartUI();
     initReveal();
   }

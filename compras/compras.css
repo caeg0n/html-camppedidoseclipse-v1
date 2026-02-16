@@ -189,6 +189,58 @@
   width: fit-content;
 }
 
+.item-size-wrap {
+  display: grid;
+  gap: 8px;
+}
+
+.item-size-label {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(253, 191, 0, 0.9);
+}
+
+.item-sizes {
+  display: grid;
+  gap: 8px;
+}
+
+.size-chip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f2f2f2;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+}
+
+.size-chip:hover {
+  border-color: rgba(253, 191, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+.size-chip.is-active {
+  border-color: rgba(253, 191, 0, 0.75);
+  background: rgba(253, 191, 0, 0.08);
+}
+
+.size-name {
+  font-weight: 800;
+}
+
+.size-price {
+  color: rgba(253, 191, 0, 0.98);
+  font-weight: 800;
+}
+
 .item-total {
   display: flex;
   align-items: center;
