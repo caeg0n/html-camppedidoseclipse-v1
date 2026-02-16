@@ -377,6 +377,13 @@
       addBtn.disabled = false;
       addBtn.textContent = "Adicionar ao carrinho";
       currentSizeLabel = size.name || "Tamanho";
+      const isBroto = /broto/i.test(currentSizeLabel);
+      if (halfToggle) {
+        halfToggle.checked = false;
+        halfToggle.disabled = isBroto;
+      }
+      isHalf = false;
+      if (flavorSecondWrap) flavorSecondWrap.style.display = "none";
       updatePizzaNameKey();
     }
 

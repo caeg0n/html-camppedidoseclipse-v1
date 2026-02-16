@@ -271,6 +271,19 @@
   accent-color: #fdbf00;
 }
 
+.item-half-toggle input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.item-half-toggle span {
+  color: #e8e8e8;
+}
+
+.item-half-toggle input:disabled + span {
+  color: #9a9a9a;
+}
+
 .item-flavor-second {
   display: none;
   gap: 6px;
