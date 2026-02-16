@@ -17,7 +17,7 @@
 .floating-cart {
   position: fixed;
   top: 18px;
-  left: 18px;
+  right: 18px;
   z-index: 5;
   display: grid;
   gap: 6px;
@@ -582,7 +582,6 @@
 
 @media (max-width: 760px) {
   .floating-cart {
-    left: auto;
     right: 14px;
     top: auto;
     bottom: 14px;
