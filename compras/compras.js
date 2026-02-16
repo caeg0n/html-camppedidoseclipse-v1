@@ -91,11 +91,27 @@
     return { qty, totalCents: total };
   }
 
+  function pickEmoji(name) {
+    const n = String(name || "").toLowerCase();
+    if (n.includes("pizza")) return "🍕";
+    if (n.includes("hamb") || n.includes("x-") || n.includes("x ")) return "🍔";
+    if (n.includes("batata")) return "🍟";
+    if (n.includes("refrigerante") || n.includes("coca") || n.includes("guaraná")) return "🥤";
+    if (n.includes("suco")) return "🧃";
+    if (n.includes("cerveja")) return "🍺";
+    if (n.includes("porção") || n.includes("porcao")) return "🍗";
+    if (n.includes("frango")) return "🍗";
+    if (n.includes("caldo")) return "🍲";
+    if (n.includes("sandu")) return "🥪";
+    if (n.includes("molho")) return "🥫";
+    return "🍽️";
+  }
+
   function buildWhatsAppMessage(cart) {
     const keys = Object.keys(cart.items || {});
     if (!keys.length) return "";
 
-    const lines = ["Pedido - Eclipse Lanchonete e Pizzaria", ""];
+    const lines = ["Olá! 👋", "Pedido para Eclipse Lanchonete e Pizzaria", ""];
     keys.sort((a, b) => {
       const ia = cart.items[a];
       const ib = cart.items[b];
@@ -105,7 +121,8 @@
     for (const k of keys) {
       const it = cart.items[k];
       const subtotal = (it.qty || 0) * (it.priceCents || 0);
-      lines.push(`${it.qty}x ${it.name} - ${formatCentsBRL(subtotal)}`);
+      const emoji = pickEmoji(it.name);
+      lines.push(`${it.qty}x ${it.name} ${emoji} - ${formatCentsBRL(subtotal)}`);
     }
 
     const totals = cartTotals(cart);
@@ -114,6 +131,8 @@
     lines.push("");
     lines.push("Endereço:");
     lines.push("Forma de pagamento:");
+    lines.push("");
+    lines.push("Obrigado!");
 
     return lines.join("\n");
   }
