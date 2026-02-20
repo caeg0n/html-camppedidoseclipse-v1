@@ -246,14 +246,14 @@
     return `
       <div class="menu-grid">
         ${finalItems
-          .map((it) => {
-            const cents = parsePriceToCents(it.price);
-            const hasPrice = Number.isFinite(cents);
-            const key = itemKey(sectionId, groupTitle, it.name || "");
-            const desc = it.desc ? `<p class="item-desc">${escapeHtml(it.desc)}</p>` : "";
-            const price = hasPrice && it.price ? `<span class="price">${escapeHtml(it.price)}</span>` : "";
+        .map((it) => {
+          const cents = parsePriceToCents(it.price);
+          const hasPrice = Number.isFinite(cents);
+          const key = itemKey(sectionId, groupTitle, it.name || "");
+          const desc = it.desc ? `<p class="item-desc">${escapeHtml(it.desc)}</p>` : "";
+          const price = hasPrice && it.price ? `<span class="price">${escapeHtml(it.price)}</span>` : "";
 
-            return `
+          return `
               <article class="item" data-item-key="${escapeAttr(key)}">
                 <div class="item-top">
                   <h3 class="item-name">${escapeHtml(it.name || "")}</h3>
@@ -263,8 +263,8 @@
                 ${hasPrice ? "" : `<p class="item-desc">Sem preço</p>`}
               </article>
             `;
-          })
-          .join("")}
+        })
+        .join("")}
       </div>
     `;
   }
@@ -275,18 +275,18 @@
 
     const inner = groups
       ? groups
-          .map((g) => {
-            const note = g.note ? `<p class="section-note">${escapeHtml(g.note)}</p>` : "";
-            const title = g.title ? `<div class="subgroup-head"><h3>${escapeHtml(g.title)}</h3></div>` : "";
-            return `
+        .map((g) => {
+          const note = g.note ? `<p class="section-note">${escapeHtml(g.note)}</p>` : "";
+          const title = g.title ? `<div class="subgroup-head"><h3>${escapeHtml(g.title)}</h3></div>` : "";
+          return `
               <div class="menu-subgroup">
                 ${title}
                 ${note}
                 ${renderItems(section.id, g.title || "", g.items, section.sortByPrice || g.sortByPrice)}
               </div>
             `;
-          })
-          .join("")
+        })
+        .join("")
       : renderItems(section.id, "", items || [], section.sortByPrice);
 
     return `
@@ -461,18 +461,18 @@
         if (sizeWrap) sizeWrap.style.display = "";
         if (sizeList) {
           sizeList.innerHTML = pizzaSizes
-          .map((s, idx) => {
-            const label = escapeHtml(s.name || "");
-            const price = escapeHtml(s.price || "");
-            const active = idx === 0 ? "is-active" : "";
-            return `
+            .map((s, idx) => {
+              const label = escapeHtml(s.name || "");
+              const price = escapeHtml(s.price || "");
+              const active = idx === 0 ? "is-active" : "";
+              return `
               <button class="size-chip ${active}" type="button" data-idx="${idx}">
                 <span class="size-name">${label}</span>
                 <span class="size-price">${price}</span>
               </button>
             `;
-          })
-          .join("");
+            })
+            .join("");
         }
         const firstSize = pizzaSizes[0];
         setPriceFromSize(firstSize);
@@ -556,7 +556,7 @@
       const cart = getCart();
       const msg = buildWhatsAppMessage(cart);
       if (!msg) return;
-      const phone = "5566981233010";
+      const phone = "5566992120997";
       const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
       window.open(url, "_blank");
     });
