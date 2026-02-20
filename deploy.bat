@@ -60,9 +60,9 @@ if "%OWNER%"=="" (
 set "REPO=%~2"
 if "%REPO%"=="" set "REPO=%GITHUB_REPO%"
 if "%REPO%"=="" (
-  set "REPO=react-eclipsecardapio-v1"
+  set "REPO=html-camppedidoseclipse-v1"
   set "REPO_IN="
-  set /p REPO_IN=Informe o nome do repositorio [react-eclipsecardapio-v1]: 
+  set /p REPO_IN=Informe o nome do repositorio [html-camppedidoseclipse-v1]: 
   if not "%REPO_IN%"=="" set "REPO=%REPO_IN%"
 )
 

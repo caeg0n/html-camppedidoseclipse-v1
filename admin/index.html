@@ -1,74 +1,69 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin | Editar menu-data.js</title>
-    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="admin.css" />
-  </head>
-  <body>
-    <header class="admin-hero">
-      <div>
-        <p class="kicker">Painel do Cardápio</p>
-        <h1>Atualizar Preços e Itens</h1>
-        <p class="subtle">
-          Altere o cardápio abaixo e clique em <strong>Salvar no GitHub</strong>.
-          Em poucos instantes o site será atualizado.
-        </p>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Editar menu-data.js</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+
+<body>
+  <header class="admin-hero">
+    <div>
+      <p class="kicker">Painel do Cardápio</p>
+      <h1>Atualizar Preços e Itens</h1>
+      <p class="subtle">
+        Altere o cardápio abaixo e clique em <strong>Salvar no GitHub</strong>.
+        Em poucos instantes o site será atualizado.
+      </p>
+    </div>
+    <div class="admin-actions">
+      <a class="btn btn-ghost" href="../" target="_blank" rel="noopener">Ver cardápio</a>
+      <button id="save-remote" class="btn btn-primary">Salvar no GitHub</button>
+    </div>
+  </header>
+
+  <main>
+    <form class="hidden-form" aria-hidden="true">
+      <input id="owner" type="text" value="caeg0n" />
+      <input id="repo" type="text" value="html-camppedidoseclipse-v1" />
+      <input id="branch" type="text" value="main" />
+      <input id="path" type="text" value="menu-data.js" />
+      <input id="token" type="password" />
+    </form>
+    <textarea id="editor" spellcheck="false"></textarea>
+  </main>
+
+  <dialog id="key-dialog" class="key-dialog">
+    <form method="dialog" class="key-card">
+      <h2>Chave de acesso</h2>
+      <p class="subtle">Digite a chave para liberar o salvamento no GitHub.</p>
+      <input id="key-input" type="password" placeholder="Sua chave" autocomplete="current-password" />
+      <div class="key-actions">
+        <button value="cancel" class="btn btn-ghost" type="submit">Cancelar</button>
+        <button id="key-confirm" value="ok" class="btn btn-primary" type="submit">Desbloquear</button>
       </div>
-      <div class="admin-actions">
-        <a class="btn btn-ghost" href="../" target="_blank" rel="noopener">Ver cardápio</a>
-        <button id="save-remote" class="btn btn-primary">Salvar no GitHub</button>
-      </div>
-    </header>
+      <p class="hint">A chave não sai do navegador. Ela só desbloqueia o token criptografado.</p>
+    </form>
+  </dialog>
 
-    <main>
-      <form class="hidden-form" aria-hidden="true">
-        <input id="owner" type="text" value="caeg0n" />
-        <input id="repo" type="text" value="react-eclipsecardapio-v1" />
-        <input id="branch" type="text" value="main" />
-        <input id="path" type="text" value="menu-data.js" />
-        <input id="token" type="password" />
-      </form>
-      <textarea id="editor" spellcheck="false"></textarea>
-    </main>
+  <section class="helper">
+    <h2>Como aplicar</h2>
+    <ol>
+      <li>Edite o conteúdo no editor.</li>
+      <li>Clique em <strong>Baixar menu-data.js</strong>.</li>
+      <li>Substitua o arquivo <code>menu-data.js</code> no projeto.</li>
+      <li>Faça o deploy novamente.</li>
+    </ol>
+  </section>
 
-    <dialog id="key-dialog" class="key-dialog">
-      <form method="dialog" class="key-card">
-        <h2>Chave de acesso</h2>
-        <p class="subtle">Digite a chave para liberar o salvamento no GitHub.</p>
-        <input
-          id="key-input"
-          type="password"
-          placeholder="Sua chave"
-          autocomplete="current-password"
-        />
-        <div class="key-actions">
-          <button value="cancel" class="btn btn-ghost" type="submit">Cancelar</button>
-          <button id="key-confirm" value="ok" class="btn btn-primary" type="submit">Desbloquear</button>
-        </div>
-        <p class="hint">A chave não sai do navegador. Ela só desbloqueia o token criptografado.</p>
-      </form>
-    </dialog>
+  <script src="../menu-data.js"></script>
+  <script src="admin.js"></script>
+</body>
 
-    <section class="helper">
-      <h2>Como aplicar</h2>
-      <ol>
-        <li>Edite o conteúdo no editor.</li>
-        <li>Clique em <strong>Baixar menu-data.js</strong>.</li>
-        <li>Substitua o arquivo <code>menu-data.js</code> no projeto.</li>
-        <li>Faça o deploy novamente.</li>
-      </ol>
-    </section>
-
-    <script src="../menu-data.js"></script>
-    <script src="admin.js"></script>
-  </body>
 </html>

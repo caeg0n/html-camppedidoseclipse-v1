@@ -1,207 +1,169 @@
 ﻿<!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eclipse | Compras</title>
-    <meta
-      name="description"
-      content="Adicione itens ao carrinho e confira o total. Card&aacute;pio Eclipse Lanchonete e Pizzaria."
-    />
-    <link
-      rel="canonical"
-      href="https://caeg0n.github.io/react-eclipsecardapio-v1/compras/"
-    />
-    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="../styles.css" />
-    <link rel="stylesheet" href="./compras.css" />
-  </head>
-  <body>
-    <div class="bg-glow bg-glow-left"></div>
-    <div class="bg-glow bg-glow-right"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eclipse | Compras</title>
+  <meta name="description"
+    content="Adicione itens ao carrinho e confira o total. Card&aacute;pio Eclipse Lanchonete e Pizzaria." />
+  <link rel="canonical" href="https://caeg0n.github.io/html-camppedidoseclipse-v1/compras/" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
 
-    <aside class="floating-cart" aria-label="Carrinho">
-      <span class="cart-label">Carrinho</span>
-      <button class="cart-fab" id="cart-open" type="button" aria-label="Abrir carrinho">
-        <span class="cart-badge" id="cart-badge" aria-hidden="true">0</span>
-        <svg
-          class="cart-icon"
-          viewBox="0 0 24 24"
-          width="22"
-          height="22"
-          aria-hidden="true"
-        >
-          <path
-            fill="currentColor"
-            d="M7.3 18.3a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4Zm10 0a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4ZM6.2 5.2H21a1 1 0 0 1 .98 1.2l-1.3 6.2a2 2 0 0 1-1.96 1.6H9a2 2 0 0 1-1.96-1.6L5.2 3.9H2.8a1 1 0 1 1 0-2H6a1 1 0 0 1 .98.8l.22 1.5Zm2.3 7.4h10.1l1-5H7.8l.7 5Z"
-          />
-        </svg>
-      </button>
-    </aside>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="./compras.css" />
+</head>
 
-    <header class="hero reveal">
-      <img
-        class="brand-mark"
-        src="../reference-page-main.png"
-        alt="Logo Eclipse Lanchonete e Pizzaria"
-      />
+<body>
+  <div class="bg-glow bg-glow-left"></div>
+  <div class="bg-glow bg-glow-right"></div>
 
-      <div class="hero-copy">
-        <p class="kicker">Card&aacute;pio Digital</p>
-        <h1>ECLIPSE LANCHONETE E PIZZARIA</h1>
-        <p>Sandu&iacute;ches, Pizzas, Caldos, Por&ccedil;&otilde;es e Jantinhas.</p>
-      </div>
+  <aside class="floating-cart" aria-label="Carrinho">
+    <span class="cart-label">Carrinho</span>
+    <button class="cart-fab" id="cart-open" type="button" aria-label="Abrir carrinho">
+      <span class="cart-badge" id="cart-badge" aria-hidden="true">0</span>
+      <svg class="cart-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path fill="currentColor"
+          d="M7.3 18.3a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4Zm10 0a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4ZM6.2 5.2H21a1 1 0 0 1 .98 1.2l-1.3 6.2a2 2 0 0 1-1.96 1.6H9a2 2 0 0 1-1.96-1.6L5.2 3.9H2.8a1 1 0 1 1 0-2H6a1 1 0 0 1 .98.8l.22 1.5Zm2.3 7.4h10.1l1-5H7.8l.7 5Z" />
+      </svg>
+    </button>
+  </aside>
 
-      <div class="hero-delivery">
-        <img
-          class="hero-bike"
-          src="../reference-page-secondary.png"
-          alt="Ilustra&ccedil;&atilde;o de delivery"
-        />
+  <header class="hero reveal">
+    <img class="brand-mark" src="../reference-page-main.png" alt="Logo Eclipse Lanchonete e Pizzaria" />
 
-        <div class="delivery-callout">
-          <span class="delivery-label">Telefone do Delivery</span>
+    <div class="hero-copy">
+      <p class="kicker">Card&aacute;pio Digital</p>
+      <h1>ECLIPSE LANCHONETE E PIZZARIA</h1>
+      <p>Sandu&iacute;ches, Pizzas, Caldos, Por&ccedil;&otilde;es e Jantinhas.</p>
+    </div>
 
-          <div class="delivery-row">
-            <div class="delivery-section">
-              <a class="delivery-phone" href="tel:+5566992120997">(66) 99212-0997</a>
-            </div>
+    <div class="hero-delivery">
+      <img class="hero-bike" src="../reference-page-secondary.png" alt="Ilustra&ccedil;&atilde;o de delivery" />
+
+      <div class="delivery-callout">
+        <span class="delivery-label">Telefone do Delivery</span>
+
+        <div class="delivery-row">
+          <div class="delivery-section">
+            <a class="delivery-phone" href="tel:+5566981233010">(66) 98123-3010</a>
           </div>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <nav class="menu-nav reveal" id="menu-nav"></nav>
+  <nav class="menu-nav reveal" id="menu-nav"></nav>
 
-    <main id="menu-root"></main>
+  <main id="menu-root"></main>
 
-    <section class="slogan reveal" aria-label="Mensagem da casa">
-      <div class="slogan-card">
-        <div class="slogan-orbit"></div>
-        <div class="slogan-orbit orbit-two"></div>
-        <h2>O por do sol mais charmoso da city</h2>
-        <ul class="slogan-list">
-          <li><span class="slogan-icon">•</span>Acima da escola Couto Magalhaes</li>
-          <li><span class="slogan-icon">•</span>Fazemos entregas</li>
-        </ul>
-        <div class="slogan-cta">
-          <span>SIMPLICIDADE &amp; QUALIDADE</span>
+  <section class="slogan reveal" aria-label="Mensagem da casa">
+    <div class="slogan-card">
+      <div class="slogan-orbit"></div>
+      <div class="slogan-orbit orbit-two"></div>
+      <h2>O por do sol mais charmoso da city</h2>
+      <ul class="slogan-list">
+        <li><span class="slogan-icon">•</span>Acima da escola Couto Magalhaes</li>
+        <li><span class="slogan-icon">•</span>Fazemos entregas</li>
+      </ul>
+      <div class="slogan-cta">
+        <span>SIMPLICIDADE &amp; QUALIDADE</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="reveal">
+    <p class="build-version">Versao: <span id="build-version">v0</span></p>
+  </footer>
+
+  <dialog class="item-dialog" id="item-dialog" aria-label="Adicionar item">
+    <form method="dialog" class="item-card">
+      <div class="item-head">
+        <div>
+          <p class="item-kicker">Adicionar</p>
+          <h2 class="item-title" id="item-title">Item</h2>
+        </div>
+        <button class="item-close" value="close" aria-label="Fechar" type="submit">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="currentColor"
+              d="M18.3 5.7a1 1 0 0 1 0 1.4L13.4 12l4.9 4.9a1 1 0 1 1-1.4 1.4L12 13.4l-4.9 4.9a1 1 0 1 1-1.4-1.4l4.9-4.9-4.9-4.9a1 1 0 0 1 1.4-1.4l4.9 4.9 4.9-4.9a1 1 0 0 1 1.4 0Z" />
+          </svg>
+        </button>
+      </div>
+      <div class="item-body">
+        <p class="item-desc" id="item-desc"></p>
+        <div class="item-price" id="item-price"></div>
+        <div class="item-size-wrap" id="item-size-wrap">
+          <p class="item-size-label">Tamanho</p>
+          <div class="item-sizes" id="item-sizes"></div>
+        </div>
+        <div class="item-flavor-wrap" id="item-flavor-wrap">
+          <p class="item-size-label">Sabor</p>
+          <div class="item-flavor">
+            <span id="item-flavor-primary"></span>
+          </div>
+          <label class="item-half-toggle">
+            <input type="checkbox" id="item-half-toggle" />
+            <span>Meia / Meia</span>
+          </label>
+          <div class="item-flavor-second" id="item-flavor-second">
+            <label class="item-size-label" for="item-flavor-select">Segundo sabor</label>
+            <select id="item-flavor-select"></select>
+          </div>
+        </div>
+        <div class="item-total">
+          <span>Total</span>
+          <strong id="item-total">R$ 0,00</strong>
+        </div>
+        <div class="item-qty">
+          <button type="button" id="item-dec" aria-label="Diminuir">-</button>
+          <span id="item-qty">1</span>
+          <button type="button" id="item-inc" aria-label="Aumentar">+</button>
         </div>
       </div>
-    </section>
+      <div class="item-foot">
+        <button class="item-add" id="item-add" type="button">Adicionar ao carrinho</button>
+      </div>
+    </form>
+  </dialog>
 
-    <footer class="reveal">
-      <p class="build-version">Versao: <span id="build-version">v0</span></p>
-    </footer>
+  <dialog class="cart-dialog" id="cart-dialog" aria-label="Carrinho">
+    <form method="dialog" class="cart-card">
+      <div class="cart-head">
+        <div>
+          <p class="cart-kicker">Seu carrinho</p>
+          <h2 class="cart-title">Itens adicionados</h2>
+        </div>
+        <button class="cart-close" value="close" aria-label="Fechar" type="submit">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="currentColor"
+              d="M18.3 5.7a1 1 0 0 1 0 1.4L13.4 12l4.9 4.9a1 1 0 1 1-1.4 1.4L12 13.4l-4.9 4.9a1 1 0 1 1-1.4-1.4l4.9-4.9-4.9-4.9a1 1 0 0 1 1.4-1.4l4.9 4.9 4.9-4.9a1 1 0 0 1 1.4 0Z" />
+          </svg>
+        </button>
+      </div>
 
-    <dialog class="item-dialog" id="item-dialog" aria-label="Adicionar item">
-      <form method="dialog" class="item-card">
-        <div class="item-head">
-          <div>
-            <p class="item-kicker">Adicionar</p>
-            <h2 class="item-title" id="item-title">Item</h2>
-          </div>
-          <button class="item-close" value="close" aria-label="Fechar" type="submit">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M18.3 5.7a1 1 0 0 1 0 1.4L13.4 12l4.9 4.9a1 1 0 1 1-1.4 1.4L12 13.4l-4.9 4.9a1 1 0 1 1-1.4-1.4l4.9-4.9-4.9-4.9a1 1 0 0 1 1.4-1.4l4.9 4.9 4.9-4.9a1 1 0 0 1 1.4 0Z"
-              />
-            </svg>
+      <div class="cart-body" id="cart-body"></div>
+
+      <div class="cart-foot">
+        <div class="cart-total">
+          <span>Total</span>
+          <strong id="cart-total">R$ 0,00</strong>
+        </div>
+        <div class="cart-actions">
+          <button class="cart-clear" id="cart-clear" type="button">Limpar</button>
+          <button class="cart-whatsapp" id="cart-whatsapp" type="button">
+            Enviar no WhatsApp
           </button>
         </div>
-        <div class="item-body">
-          <p class="item-desc" id="item-desc"></p>
-          <div class="item-price" id="item-price"></div>
-          <div class="item-size-wrap" id="item-size-wrap">
-            <p class="item-size-label">Tamanho</p>
-            <div class="item-sizes" id="item-sizes"></div>
-          </div>
-          <div class="item-flavor-wrap" id="item-flavor-wrap">
-            <p class="item-size-label">Sabor</p>
-            <div class="item-flavor">
-              <span id="item-flavor-primary"></span>
-            </div>
-            <label class="item-half-toggle">
-              <input type="checkbox" id="item-half-toggle" />
-              <span>Meia / Meia</span>
-            </label>
-            <div class="item-flavor-second" id="item-flavor-second">
-              <label class="item-size-label" for="item-flavor-select">Segundo sabor</label>
-              <select id="item-flavor-select"></select>
-            </div>
-          </div>
-          <div class="item-total">
-            <span>Total</span>
-            <strong id="item-total">R$ 0,00</strong>
-          </div>
-          <div class="item-qty">
-            <button type="button" id="item-dec" aria-label="Diminuir">-</button>
-            <span id="item-qty">1</span>
-            <button type="button" id="item-inc" aria-label="Aumentar">+</button>
-          </div>
-        </div>
-        <div class="item-foot">
-          <button class="item-add" id="item-add" type="button">Adicionar ao carrinho</button>
-        </div>
-      </form>
-    </dialog>
+      </div>
+    </form>
+  </dialog>
 
-    <dialog class="cart-dialog" id="cart-dialog" aria-label="Carrinho">
-      <form method="dialog" class="cart-card">
-        <div class="cart-head">
-          <div>
-            <p class="cart-kicker">Seu carrinho</p>
-            <h2 class="cart-title">Itens adicionados</h2>
-          </div>
-          <button class="cart-close" value="close" aria-label="Fechar" type="submit">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M18.3 5.7a1 1 0 0 1 0 1.4L13.4 12l4.9 4.9a1 1 0 1 1-1.4 1.4L12 13.4l-4.9 4.9a1 1 0 1 1-1.4-1.4l4.9-4.9-4.9-4.9a1 1 0 0 1 1.4-1.4l4.9 4.9 4.9-4.9a1 1 0 0 1 1.4 0Z"
-              />
-            </svg>
-          </button>
-        </div>
+  <script src="./compras.js?v=20260220-1"></script>
+  <script src="../version.js" data-base="../"></script>
+</body>
 
-        <div class="cart-body" id="cart-body"></div>
-
-        <div class="cart-foot">
-          <div class="cart-total">
-            <span>Total</span>
-            <strong id="cart-total">R$ 0,00</strong>
-          </div>
-          <div class="cart-actions">
-            <button class="cart-clear" id="cart-clear" type="button">Limpar</button>
-            <button class="cart-whatsapp" id="cart-whatsapp" type="button">
-              Enviar no WhatsApp
-            </button>
-          </div>
-        </div>
-      </form>
-    </dialog>
-
-    <script src="./compras.js"></script>
-    <script src="../version.js" data-base="../"></script>
-  </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
