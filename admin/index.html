@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Admin | Editar menu-data.js</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -64,6 +64,70 @@
 
   <script src="../menu-data.js"></script>
   <script src="admin.js"></script>
+  <script>
+    // Safe area runtime
+    (function () {
+      var root = document.documentElement;
+      if (!root) return;
+
+      var MAX_BOTTOM_INSET = 96;
+      var MAX_TOP_INSET = 72;
+
+      function toPx(value) {
+        var num = parseFloat(String(value || "").replace("px", "").trim());
+        return Number.isFinite(num) ? num : 0;
+      }
+
+      function readVar(name) {
+        try {
+          return toPx(getComputedStyle(root).getPropertyValue(name));
+        } catch (_err) {
+          return 0;
+        }
+      }
+
+      function viewportTopInset() {
+        if (!window.visualViewport) return 0;
+        var raw = window.visualViewport.offsetTop;
+        if (!Number.isFinite(raw) || raw <= 0 || raw > MAX_TOP_INSET) return 0;
+        return raw;
+      }
+
+      function viewportBottomInset() {
+        if (!window.visualViewport) return 0;
+        var vv = window.visualViewport;
+        var raw = window.innerHeight - (vv.height + vv.offsetTop);
+        if (!Number.isFinite(raw) || raw <= 0 || raw > MAX_BOTTOM_INSET) return 0;
+        return raw;
+      }
+
+      function updateSafeArea() {
+        var envTop = readVar("--campp-safe-area-top-env");
+        var envBottom = readVar("--campp-safe-area-bottom-env");
+        var topInset = Math.max(envTop, viewportTopInset(), 0);
+        var bottomInset = Math.max(envBottom, viewportBottomInset(), 0);
+        root.style.setProperty("--campp-safe-area-top", Math.round(topInset) + "px");
+        root.style.setProperty("--campp-safe-area-bottom", Math.round(bottomInset) + "px");
+      }
+
+      function scheduleUpdate() {
+        if (typeof window.requestAnimationFrame === "function") {
+          window.requestAnimationFrame(updateSafeArea);
+          return;
+        }
+        setTimeout(updateSafeArea, 0);
+      }
+
+      updateSafeArea();
+      window.addEventListener("resize", scheduleUpdate, { passive: true });
+      window.addEventListener("orientationchange", scheduleUpdate, { passive: true });
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", scheduleUpdate, { passive: true });
+        window.visualViewport.addEventListener("scroll", scheduleUpdate, { passive: true });
+      }
+    })();
+  </script>
 </body>
 
 </html>

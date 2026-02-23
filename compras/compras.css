@@ -41,7 +41,7 @@
 
 .floating-cart {
   position: fixed;
-  top: 18px;
+  top: calc(18px + var(--campp-safe-area-top));
   right: 18px;
   z-index: 5;
   display: grid;
@@ -632,6 +632,6 @@
   .floating-cart {
     right: 14px;
     top: auto;
-    bottom: 14px;
+    bottom: calc(14px + var(--campp-safe-area-bottom));
   }
 }

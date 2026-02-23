@@ -8,6 +8,10 @@
   --accent: #e94d1b;
   --line: #2a2a2a;
   --radius: 20px;
+  --campp-safe-area-top-env: env(safe-area-inset-top, 0px);
+  --campp-safe-area-bottom-env: env(safe-area-inset-bottom, 0px);
+  --campp-safe-area-top: var(--campp-safe-area-top-env);
+  --campp-safe-area-bottom: var(--campp-safe-area-bottom-env);
 }
 
 * {
@@ -27,6 +31,8 @@ body {
 body {
   min-height: 100vh;
   padding: 24px;
+  padding-top: calc(24px + var(--campp-safe-area-top));
+  padding-bottom: calc(24px + var(--campp-safe-area-bottom));
   overflow-x: hidden;
 }
 
@@ -210,6 +216,8 @@ section.menu-section {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 18px;
+    padding-top: calc(18px + var(--campp-safe-area-top));
+    padding-bottom: calc(18px + var(--campp-safe-area-bottom));
 }
 
 .section-head {
