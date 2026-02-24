@@ -191,6 +191,61 @@ async function saveToGitHub() {
 
 saveRemoteBtn.addEventListener("click", saveToGitHub);
 
+function installCapacitorBackNavigation() {
+  const cap = window.Capacitor;
+  const appPlugin = cap?.Plugins?.App;
+  if (!appPlugin || typeof appPlugin.addListener !== "function") return;
+
+  const coreSlug = "html-camppedidoscore-v1";
+  const coreUrl = "https://caeg0n.github.io/html-camppedidoscore-v1/";
+  const parts = () => (window.location.pathname || "/").split("/").filter(Boolean);
+  const projectSlug = parts()[0] || "";
+  if (!projectSlug || !projectSlug.startsWith("html-") || projectSlug === coreSlug) return;
+
+  const isProjectRoot = () => {
+    const p = parts();
+    const pagePart = p[1] || "";
+    return p.length === 1 || (p.length === 2 && pagePart.toLowerCase() === "index.html");
+  };
+
+  let redirected = false;
+  const navigateTo = (url) => {
+    if (redirected) return;
+    redirected = true;
+    window.location.href = url;
+  };
+  const goCore = () => navigateTo(coreUrl);
+  const goProjectRoot = () => navigateTo(`${window.location.origin}/${projectSlug}/`);
+  const handleBack = () => {
+    if (isProjectRoot()) {
+      goCore();
+      return;
+    }
+    goProjectRoot();
+  };
+
+  document.addEventListener(
+    "backbutton",
+    (event) => {
+      event.preventDefault();
+      handleBack();
+    },
+    { passive: false }
+  );
+
+  appPlugin.addListener("backButton", ({ canGoBack }) => {
+    if (canGoBack && !isProjectRoot()) {
+      window.history.back();
+      setTimeout(() => {
+        if (!isProjectRoot()) goProjectRoot();
+      }, 120);
+      return;
+    }
+    handleBack();
+  });
+}
+
+installCapacitorBackNavigation();
 loadFromSite();
 const settings = loadSettings();
 

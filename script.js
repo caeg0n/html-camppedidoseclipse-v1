@@ -123,23 +123,36 @@ async function init() {
 
 function installCapacitorRootBackToCore() {
   const cap = window.Capacitor;
-  const isNative = !!(cap && cap.Plugins);
-  if (!isNative) return;
+  const appPlugin = cap?.Plugins?.App;
+  if (!appPlugin || typeof appPlugin.addListener !== "function") return;
 
   const coreSlug = "html-camppedidoscore-v1";
   const coreUrl = "https://caeg0n.github.io/html-camppedidoscore-v1/";
-  const pathParts = (window.location.pathname || "/").split("/").filter(Boolean);
-  const projectSlug = pathParts[0] || "";
-  const pagePart = pathParts[1] || "";
-  const isProjectRoot = pathParts.length === 1 || (pathParts.length === 2 && pagePart.toLowerCase() === "index.html");
+  const pathParts = () => (window.location.pathname || "/").split("/").filter(Boolean);
+  const projectSlug = pathParts()[0] || "";
+  const isProjectRoot = () => {
+    const parts = pathParts();
+    const pagePart = parts[1] || "";
+    return parts.length === 1 || (parts.length === 2 && pagePart.toLowerCase() === "index.html");
+  };
+  const projectRootUrl = `${window.location.origin}/${projectSlug}/`;
 
-  if (!projectSlug || !projectSlug.startsWith("html-") || projectSlug === coreSlug || !isProjectRoot) return;
+  if (!projectSlug || !projectSlug.startsWith("html-") || projectSlug === coreSlug) return;
 
   let redirected = false;
-  const goCore = () => {
+  const navigateTo = (url) => {
     if (redirected) return;
     redirected = true;
-    window.location.href = coreUrl;
+    window.location.href = url;
+  };
+  const goCore = () => navigateTo(coreUrl);
+  const goProjectRoot = () => navigateTo(projectRootUrl);
+  const handleBack = () => {
+    if (isProjectRoot()) {
+      goCore();
+      return;
+    }
+    goProjectRoot();
   };
 
   try {
@@ -149,31 +162,31 @@ function installCapacitorRootBackToCore() {
     // no-op
   }
 
-  window.addEventListener("popstate", () => {
-    const parts = (window.location.pathname || "/").split("/").filter(Boolean);
-    const atRoot = parts.length === 1 || (parts.length === 2 && (parts[1] || "").toLowerCase() === "index.html");
-    if (atRoot) goCore();
+  window.addEventListener("popstate", (event) => {
+    if (isProjectRoot() && event.state && event.state.__camppRootBackBase === true) {
+      goCore();
+    }
   });
 
   document.addEventListener(
     "backbutton",
     (event) => {
       event.preventDefault();
-      goCore();
+      handleBack();
     },
     { passive: false }
   );
 
-  const appPlugin = cap?.Plugins?.App;
-  if (appPlugin && typeof appPlugin.addListener === "function") {
-    appPlugin.addListener("backButton", ({ canGoBack }) => {
-      if (canGoBack) {
-        window.history.back();
-        return;
-      }
-      goCore();
-    });
-  }
+  appPlugin.addListener("backButton", ({ canGoBack }) => {
+    if (canGoBack && !isProjectRoot()) {
+      window.history.back();
+      setTimeout(() => {
+        if (!isProjectRoot()) goProjectRoot();
+      }, 120);
+      return;
+    }
+    handleBack();
+  });
 }
 
 installCapacitorRootBackToCore();
