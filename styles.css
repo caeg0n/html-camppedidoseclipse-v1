@@ -465,3 +465,23 @@ footer {
     padding: 22px;
   }
 }
+
+@media (max-width: 760px) {
+  body {
+    padding: 10px;
+    padding-top: calc(10px + var(--campp-safe-area-top));
+    padding-bottom: calc(10px + var(--campp-safe-area-bottom));
+  }
+
+  .hero {
+    padding: 18px 14px;
+    border-radius: 22px;
+  }
+
+  .menu-nav,
+  .menu-section,
+  .slogan-card {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}

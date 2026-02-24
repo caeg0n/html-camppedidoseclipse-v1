@@ -164,7 +164,7 @@
   border: 0;
   padding: 0;
   background: transparent;
-  max-width: min(460px, calc(100vw - 32px));
+  max-width: min(460px, calc(100vw - 16px));
 }
 
 .item-dialog[open] {
@@ -427,7 +427,7 @@
   border: 0;
   padding: 0;
   background: transparent;
-  max-width: min(520px, calc(100vw - 32px));
+  max-width: min(520px, calc(100vw - 16px));
 }
 
 .cart-dialog[open] {
@@ -633,5 +633,26 @@
     right: 14px;
     top: auto;
     bottom: calc(14px + var(--campp-safe-area-bottom));
+  }
+
+  .item-dialog,
+  .cart-dialog {
+    width: calc(100vw - 10px);
+    max-width: calc(100vw - 10px);
+    margin: 0;
+  }
+
+  .item-head,
+  .cart-head {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .item-body,
+  .cart-body,
+  .item-foot,
+  .cart-foot {
+    padding-left: 14px;
+    padding-right: 14px;
   }
 }
