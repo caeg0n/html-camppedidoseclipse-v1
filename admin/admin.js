@@ -224,6 +224,19 @@ function installCapacitorBackNavigation() {
     goProjectRoot();
   };
 
+  try {
+    history.replaceState({ ...(history.state || {}), __camppBackBase: true }, document.title, window.location.href);
+    history.pushState({ ...(history.state || {}), __camppBackSentinel: true }, document.title, window.location.href);
+  } catch (_err) {
+    // no-op
+  }
+
+  window.addEventListener("popstate", (event) => {
+    if (event.state && event.state.__camppBackBase === true) {
+      handleBack();
+    }
+  });
+
   document.addEventListener(
     "backbutton",
     (event) => {

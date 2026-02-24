@@ -156,15 +156,15 @@ function installCapacitorRootBackToCore() {
   };
 
   try {
-    history.replaceState({ ...(history.state || {}), __camppRootBackBase: true }, document.title, window.location.href);
-    history.pushState({ ...(history.state || {}), __camppRootBackSentinel: true }, document.title, window.location.href);
+    history.replaceState({ ...(history.state || {}), __camppBackBase: true }, document.title, window.location.href);
+    history.pushState({ ...(history.state || {}), __camppBackSentinel: true }, document.title, window.location.href);
   } catch (_err) {
     // no-op
   }
 
   window.addEventListener("popstate", (event) => {
-    if (isProjectRoot() && event.state && event.state.__camppRootBackBase === true) {
-      goCore();
+    if (event.state && event.state.__camppBackBase === true) {
+      handleBack();
     }
   });
 
